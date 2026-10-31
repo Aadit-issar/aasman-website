@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy - Aasman</title>
+<meta name="description" content="How Aasman, a private single-owner personal AI assistant, handles data, including data from Google APIs.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://aadit-issar.github.io/aasman-website/privacy.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site"><div class="bar">
+<a class="brand" href="index.html">Aasman</a>
+<nav aria-label="Main"><ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="privacy.html" aria-current="page">Privacy Policy</a></li>
+<li><a href="terms.html">Terms of Service</a></li>
+</ul></nav>
+</div></header>
+<main id="main">
+<h1>Privacy Policy</h1>
+<p class="meta">Last updated: 31 October 2026</p>
+<p>This policy describes how Aasman (a private personal AI assistant) handles information, including information received from Google APIs. Aasman is operated by an individual, identified publicly only by the GitHub account <a href="https://github.com/Aadit-issar">Aadit-issar</a>, who is both the operator and the sole user (the "owner").</p>
+
+<div class="notice" role="note">
+<p><strong>Summary.</strong> Aasman is a single-user, non-public tool. It reads or changes Google data only when its owner asks it to, keeps the Google sign-in credentials on the owner's own device, does not sell data, does not show ads and does not use Google data to build or train advertising or its own models.</p>
+</div>
+
+<h2>1. Who can use Aasman</h2>
+<p>Only the owner. Aasman accepts messages only from the owner's own WhatsApp account. It has no public users and no sign-up, and no one else's Google account is ever connected. There is therefore no data of third-party users to collect.</p>
+
+<h2>2. Google user data Aasman can access</h2>
+<p>When the owner connects Google, Aasman requests the following OAuth scopes. The owner can approve a subset of services.</p>
+<div class="scroll"><table>
+<thead><tr><th scope="col">Service</th><th scope="col">Scope</th><th scope="col">Why it is needed</th></tr></thead>
+<tbody>
+<tr><th scope="row">Calendar</th><td><code>calendar.events</code>, <code>calendar.freebusy</code></td><td>Read, create, update and delete events on the owner's primary calendar; check availability.</td></tr>
+<tr><th scope="row">Gmail</th><td><code>gmail.modify</code></td><td>Search and read messages, apply labels, create drafts and send an email to the owner's own address. The application restricts sending to the owner's own address in its own code.</td></tr>
+<tr><th scope="row">Drive</th><td><code>drive.readonly</code>, <code>drive.file</code></td><td>Search and read the owner's files; create new text files.</td></tr>
+<tr><th scope="row">Docs</th><td><code>documents</code></td><td>Create, read and edit Google Docs on request.</td></tr>
+<tr><th scope="row">Sheets</th><td><code>spreadsheets</code></td><td>Create, read and write Google Sheets on request.</td></tr>
+<tr><th scope="row">Contacts</th><td><code>contacts.readonly</code></td><td>Look up the owner's saved contacts. Read-only.</td></tr>
+</tbody></table></div>
+
+<h2>3. When Google data is accessed</h2>
+<p>Aasman calls a Google API only while handling a message the owner has sent it. There is no background monitor, digest or polling of Gmail, Calendar or Drive. Actions that change things are limited: Gmail sending is possible only to the owner's own address, only after an explicit request with confirmation, and an identical message is blocked for 10 minutes to prevent duplicates. Aasman can save Gmail drafts but cannot send them to others. Calendar deletion needs explicit confirmation, and Drive has no delete or overwrite action.</p>
+
+<h2>4. How the data is used and shared</h2>
+<p>Aasman works by passing the owner's conversation to an AI model so that it can answer. If the owner asks something that needs Google data (for example "what is on my calendar tomorrow"), the relevant results returned by Google are placed in that conversation, so the AI model provider receives the content needed to produce the answer. According to the project's configuration records, text responses are produced by OpenAI models accessed through the owner's own ChatGPT sign-in. Voice notes may be transcribed by Groq's speech-to-text service on its free tier, or by a local model on the device; that path handles audio, not Google data. Anonymous public web searches (kept free of private facts by design) go to a search service, Parallel.</p>
+<p>Aasman does not sell data, does not use Google data for advertising, and does not give anyone other than the owner access to it. Data sent to the providers named above is subject to their own privacy policies and terms, which Aasman does not control. The retention and training settings of each provider for the owner's account have not been confirmed, so none are claimed here.</p>
+
+<h2>5. What is stored</h2>
+<ul>
+<li><strong>Credentials.</strong> The OAuth client file and the token file (access and refresh tokens) are stored on the owner's own device in a private directory (<code>~/.openclaw/google</code>), written with owner-only file permissions. They are not committed to source control and are not shown to the AI model; the status tool never returns tokens.</li>
+<li><strong>Google content.</strong> Aasman's Google code does not keep its own cache or copy of mailbox, calendar, Drive, Docs, Sheets or Contacts content. Results are returned to the conversation and used to answer.</li>
+<li><strong>Send log.</strong> To prevent duplicate emails to the owner, a small file holds a truncated hash of recently sent subject and body with a timestamp, and entries older than 10 minutes are removed. It contains no readable email text.</li>
+<li><strong>Conversation records.</strong> Aasman runs on the OpenClaw assistant runtime, which can keep session transcripts of the owner's conversation on the same device. If Google content was part of an answer, it can appear in those transcripts. The runtime's transcript retention period has not been verified, so none is stated. The owner can delete these records from the device at any time.</li>
+</ul>
+
+<h2>6. Retention and deletion</h2>
+<p>Credentials remain until the owner removes them. To disconnect Google: (a) revoke Aasman at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>, which invalidates the tokens; and (b) delete the token file, <code>~/.openclaw/google/token.json</code>, from the device (deleting the whole <code>~/.openclaw/google</code> folder also removes the client file and send log). Data held in the owner's Google account itself remains the owner's and is managed through Google.</p>
+
+<h2>7. Security</h2>
+<p>Access is limited by design to one owner. Sign-in uses Google's OAuth authorization-code flow with PKCE and a loopback redirect on the device, Google data is requested over HTTPS, and tokens are kept in owner-only files. Content from emails, files and events is treated as untrusted data, and the assistant is instructed not to follow instructions found inside it. No system is perfectly secure, and no security audit or certification is claimed.</p>
+
+<h2>8. Google API Services User Data Policy (Limited Use)</h2>
+<p>Aasman's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+<p>In practice: the data is used only to provide the features the owner asks for; it is not transferred to others except as needed to provide those features (see section 4), to comply with law, or for security; it is not used for advertising; and no human reads it except the owner in their own conversation.</p>
+
+<h2>9. Children</h2>
+<p>Aasman is not directed at children and has no users other than its owner.</p>
+
+<h2>10. Changes and contact</h2>
+<p>If this policy changes, the date above will be updated. Questions can be raised on the public <a href="https://github.com/Aadit-issar/aasman-website/issues">GitHub Issues page</a>. Please do not post private information there.</p>
+</main>
+<footer class="site"><div class="bar">
+<p>Aasman is a private, single-owner project. Not affiliated with or endorsed by Google.</p>
+<nav aria-label="Footer"><ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="privacy.html">Privacy Policy</a></li>
+<li><a href="terms.html">Terms of Service</a></li>
+<li><a href="https://github.com/Aadit-issar/aasman-website/issues">Contact (GitHub Issues)</a></li>
+</ul></nav>
+</div></footer>
+</body>
+</html>
